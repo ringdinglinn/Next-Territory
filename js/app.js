@@ -18,6 +18,44 @@ var APP = {
 		this.width = 500;
 		this.height = 500;
 
+		// ****************************************************
+
+		//touchevents
+		// window.addEventListener("touchstart", handleStart, false);
+		// window.addEventListener("touchend", handleEnd, false);
+
+		//controls
+		var frwd = false;
+		var bkwd = false;
+
+		function handleStart(evt) {
+			evt.preventDefault();
+			console.log("touchstart.");
+			console.log(evt.touches);
+			if (evt.touches.length == 1){
+				frwd = true;
+				bkwd = false;
+			} else if (evt.touches.length >= 2){
+				bkwd = true;
+				frwd = false;
+			}
+		}
+
+		function handleEnd(evt) {
+			evt.preventDefault();
+			console.log("touchend.");
+			if(evt.touches.length == 0){
+				frwd = false;
+				bkwd = false;
+			} else if(evt.touches.length == 1){
+				frwd = true;
+				bkwd = false;
+			}
+			console.log(evt.touches);
+		}
+
+		// ****************************************************
+
 		this.load = function ( json ) {
 
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -179,6 +217,18 @@ var APP = {
 			renderer.render( scene, camera );
 			controls.update();
 
+			// *******************************************
+
+			if (frwd){
+				camera.position.x -= Math.sin(camera.rotation.y)/8;
+				camera.position.z -= Math.cos(camera.rotation.y)/8;
+			} else if( bkwd){
+				camera.position.x += Math.sin(camera.rotation.y)/8;
+				camera.position.z += Math.cos(camera.rotation.y)/8;
+			}
+
+			// *******************************************
+
 			prevTime = time;
 
 		}
@@ -194,7 +244,7 @@ var APP = {
 			document.addEventListener( 'mousemove', onDocumentMouseMove );
 			document.addEventListener( 'touchstart', onDocumentTouchStart );
 			document.addEventListener( 'touchend', onDocumentTouchEnd );
-			document.addEventListener( 'touchmove', onDocumentTouchMove );
+			// document.addEventListener( 'touchmove', onDocumentTouchMove );
 
 			dispatch( events.start, arguments );
 
@@ -211,7 +261,7 @@ var APP = {
 			document.removeEventListener( 'mousemove', onDocumentMouseMove );
 			document.removeEventListener( 'touchstart', onDocumentTouchStart );
 			document.removeEventListener( 'touchend', onDocumentTouchEnd );
-			document.removeEventListener( 'touchmove', onDocumentTouchMove );
+			// document.removeEventListener( 'touchmove', onDocumentTouchMove );
 
 			dispatch( events.stop, arguments );
 
@@ -268,12 +318,16 @@ var APP = {
 		}
 
 		function onDocumentTouchStart( event ) {
+			
+			handleStart(event);
 
 			dispatch( events.touchstart, event );
 
 		}
 
 		function onDocumentTouchEnd( event ) {
+
+			handleEnd(event);
 
 			dispatch( events.touchend, event );
 
