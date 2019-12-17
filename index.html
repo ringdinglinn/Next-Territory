@@ -34,7 +34,7 @@
             renderer.gammaOutput = true;
             renderer.gammaFactor = 2.2;
 
-            renderer.shadowMap.enabled = true;
+            // renderer.shadowMap.enabled = true;
             
             document.body.appendChild( renderer.domElement );
 
@@ -83,7 +83,11 @@
                 model.traverse(o => {
                     // o.material = new THREE.MeshBasicMaterial({map: model.material.map});
                     // o.material = new THREE.MeshBasicMaterial({map: texture});
-                    o.receiveShadow = true;
+
+                    // if (o instanceof THREE.Mesh) {
+                    //     o.receiveShadow = true;
+                    //     o.castShadow = true;
+                    // }
                 });
 
                 scene.add( model );
@@ -94,12 +98,12 @@
             scene.add( light );
 
             var directional = new THREE.DirectionalLight( 0xffffff );
-            directional.intensity = 1;
-            directional.castShadow = true;
+            directional.intensity = 0.7;
+            // directional.castShadow = true;
             scene.add( directional );
 
-            camera.position.y = 2;
-            camera.rotation.y = 2.5;
+            // camera.position.y = 2;
+            // camera.rotation.y = 2.5;
 
             var animate = function () {
                 requestAnimationFrame( animate );
@@ -112,7 +116,7 @@
                 // model.rotation.y += 0.01;
                 
                 renderer.render( scene, camera );
-                // controls.update();
+                controls.update();
             };
 
             animate();
