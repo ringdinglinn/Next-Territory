@@ -12,7 +12,8 @@
     </head>
 
     <body>
-        <script src="js/three.js"></script>
+        <script src="js/three.min.js"></script>
+
         <script src="js/DeviceOrientationControls.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/GLTFLoader.js"></script>
@@ -28,13 +29,16 @@
             
             var renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize( window.innerWidth, window.innerHeight );
+            // renderer.setPixelRatio(window.devicePixelRatio);
+
             renderer.gammaOutput = true;
             renderer.gammaFactor = 2.2;
-            // renderer.setPixelRatio(window.devicePixelRatio);
+
+            renderer.shadowMap.enabled = true;
+            
             document.body.appendChild( renderer.domElement );
 
             controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
-            // controls = new THREE.OrbitControls( camera, renderer.domElement );
             
             // var cubes = [];
             
@@ -79,7 +83,7 @@
                 model.traverse(o => {
                     // o.material = new THREE.MeshBasicMaterial({map: model.material.map});
                     // o.material = new THREE.MeshBasicMaterial({map: texture});
-                    
+                    o.receiveShadow = true;
                 });
 
                 scene.add( model );
@@ -94,6 +98,9 @@
             directional.castShadow = true;
             scene.add( directional );
 
+            camera.position.y = 2;
+            camera.rotation.y = 2.5;
+
             var animate = function () {
                 requestAnimationFrame( animate );
 
@@ -105,7 +112,7 @@
                 // model.rotation.y += 0.01;
                 
                 renderer.render( scene, camera );
-                controls.update();
+                // controls.update();
             };
 
             animate();
