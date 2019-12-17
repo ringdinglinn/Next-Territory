@@ -77,7 +77,7 @@
             const loader = new THREE.GLTFLoader();
             var model;
 
-            loader.load("room2_notthatsmol.glb", gltf => {
+            loader.load("room2_dark.glb", gltf => {
                 model = gltf.scene;
 
                 model.traverse(o => {
@@ -117,14 +117,14 @@
                 
                 renderer.render( scene, camera );
                 controls.update();
-                camera.rotation.y += 3.14;
+                camera.rotation.y += 5;
 
-                if (frwd){
-                    camera.position.x -= Math.sin(camera.rotation.y)/8;
-                    camera.position.z -= Math.cos(camera.rotation.y)/8;
-                } else if (bkwd){
-                    camera.position.x += Math.sin(camera.rotation.y)/8;
-                    camera.position.z += Math.cos(camera.rotation.y)/8;
+                if (frwd) {
+                    camera.position.x -= Math.sin(camera.rotation.y)/12;
+                    camera.position.z -= Math.cos(camera.rotation.y)/12;
+                } else if (bkwd) {
+                    camera.position.x += Math.sin(camera.rotation.y)/12;
+                    camera.position.z += Math.cos(camera.rotation.y)/12;
                 }
             };
 
