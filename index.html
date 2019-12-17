@@ -15,7 +15,6 @@
         <script src="js/DeviceOrientationControls.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/GLTFLoader.js"></script>
-        <!-- <script src="js/DRACOLoader.js"></script> -->
 
         <video id="video" width="305" height="540" autoplay loop playsinline muted style="display:none"></video>
         
@@ -34,7 +33,7 @@
             document.body.appendChild( renderer.domElement );
 
             controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
-            controls = new THREE.OrbitControls( camera, renderer.domElement );
+            // controls = new THREE.OrbitControls( camera, renderer.domElement );
             
             // var cubes = [];
             
@@ -70,18 +69,7 @@
             //     console.log("touchstart");
             //     });
 
-            // *************
-
-            // var loader = new THREE.ObjectLoader();
-            // loader.load("scene.json", function (obj) {
-            //     scene.add(obj);
-            // });
-
-            // *************
-
             const loader = new THREE.GLTFLoader();
-            // THREE.DRACOLoader.setDecoderPath( '/js/draco' );
-            // loader.setDRACOLoader( new THREE.DRACOLoader() );
             var model;
 
             loader.load("room2_notthatsmol.glb", gltf => {
@@ -90,7 +78,7 @@
                 model.traverse(o => {
                     // o.material = new THREE.MeshBasicMaterial({map: model.material.map});
                     // o.material = new THREE.MeshBasicMaterial({map: texture});
-                    o.
+                    
                 });
 
                 scene.add( model );
@@ -122,6 +110,16 @@
             };
 
             animate();
+        </script>
+
+        <script>
+            // Prevent scrolling viewport
+            function preventBehavior(e) {
+                e.preventDefault();
+            }
+
+            document.addEventListener("touchmove", preventBehavior, {passive: false});
+    
         </script>
     </body>
 </html>
