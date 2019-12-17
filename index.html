@@ -1,56 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title></title>
-		<meta charset="utf-8">
-		<meta name="generator" content="Three.js Editor">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				font-family: sans-serif;
-				font-size: 13px;
-				background-color: #000;
-				margin: 0px;
-				overflow: hidden;
-			}
-			canvas {
-				width: 100%;
-				height: 100%;
-			}
-		</style>
-	</head>
-	<body ontouchstart="">
-		<script src="js/three.min.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/DeviceOrientationControls.js"></script>
-		
-		<script>
+<html>
+    <head>
+        <title>טסקנ</title>
+        <link rel="shortcut icon" href="favicon.ico" />
+        <style>
+            body { margin: 0; }
+            canvas { width: 100%; height: 100% }
+            
+        </style>
+    </head>
 
-			var loader = new THREE.FileLoader();
-			loader.load( 'app.json', function ( text ) {
+    <body>
+        <script src="js/three.js"></script>
+        <script src="js/DeviceOrientationControls.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/GLTFLoader.js"></script>
+        <!-- <script src="js/DRACOLoader.js"></script> -->
 
-				var player = new APP.Player();
-				player.load( JSON.parse( text ) );
-				player.setSize( window.innerWidth, window.innerHeight );
-				player.play();
+        <video id="video" width="305" height="540" autoplay loop playsinline muted style="display:none"></video>
+        
+        <script>
+            var scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0xffffff, 0.02);
+            scene.background = new THREE.Color(0xffffff);
 
-				document.body.appendChild( player.dom );
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.gammaOutput = true;
+            renderer.gammaFactor = 2.2;
+            // renderer.setPixelRatio(window.devicePixelRatio);
+            document.body.appendChild( renderer.domElement );
 
-				window.addEventListener( 'resize', function () {
-					player.setSize( window.innerWidth, window.innerHeight );
-				} );
+            controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
+            controls = new THREE.OrbitControls( camera, renderer.domElement );
+            
+            // var cubes = [];
+            
+            // var video = document.getElementById("video");
+            // video.src = "videos/1.mp4";
+            // console.log(video);
+            // video.load();
+            // video.play();
+            // var texture = new THREE.VideoTexture(video);
+            // // var texture = new THREE.TextureLoader().load("textures/poster.png");
 
-			} );
+            // var geometry = new THREE.BoxGeometry( 2, 2, 2 );
+            // var material;
 
-		</script>
-		<script>
-		
-		// Prevent scrolling viewport
-		function preventBehavior(e) {
-                e.preventDefault();
+            // let r = 5;  // radius
+            // let n = 27;  // amount            
+
+            // for (let i = 0; i < n; i++) {
+            //     material = new THREE.MeshBasicMaterial( { map: texture } );
+            //     cubes[i] = new THREE.Mesh( geometry, material );
+
+            //     scene.add( cubes[i] );
+                
+            //     if (i < (n / 2)) {
+            //         cubes[i].position.set( Math.sin(Math.PI * 4 / n * i) * r, -1, Math.cos(Math.PI * 4 / n * i) * r );
+            //     } else {
+            //         cubes[i].position.set( Math.sin(Math.PI * 4 / n * i) * r, 1, Math.cos(Math.PI * 4 / n * i) * r );
+            //     }
+            // }
+
+            // window.addEventListener("touchstart", e => {
+            //     video.play();
+            //     console.log("touchstart");
+            //     });
+
+            // *************
+
+            // var loader = new THREE.ObjectLoader();
+            // loader.load("scene.json", function (obj) {
+            //     scene.add(obj);
+            // });
+
+            // *************
+
+            const loader = new THREE.GLTFLoader();
+            // THREE.DRACOLoader.setDecoderPath( '/js/draco' );
+            // loader.setDRACOLoader( new THREE.DRACOLoader() );
+            var model;
+
+            loader.load("room2_notthatsmol.glb", gltf => {
+                model = gltf.scene;
+
+                model.traverse(o => {
+                    // o.material = new THREE.MeshBasicMaterial({map: model.material.map});
+                    // o.material = new THREE.MeshBasicMaterial({map: texture});
+                    o.
+                });
+
+                scene.add( model );
+            });    
+
+            var light = new THREE.AmbientLight( 0xffffff );
+            light.intensity = 0.1;
+            scene.add( light );
+
+            var directional = new THREE.DirectionalLight( 0xffffff );
+            directional.intensity = 1;
+            directional.castShadow = true;
+            scene.add( directional );
+
+            camera.position.z += 4;
+
+            var animate = function () {
+                requestAnimationFrame( animate );
+
+                // for (c of cubes) {
+                //     c.rotation.x += 0.01;
+                //     c.rotation.y += 0.01;
+                // }
+                // model.rotation.x += 0.01;
+                // model.rotation.y += 0.01;
+                
+                renderer.render( scene, camera );
+                controls.update();
             };
-            document.addEventListener("touchmove", preventBehavior, {passive: false});
 
-		</script>
-	</body>
+            animate();
+        </script>
+    </body>
 </html>
