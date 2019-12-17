@@ -94,16 +94,16 @@
             });    
 
             var light = new THREE.AmbientLight( 0xffffff );
-            light.intensity = 0.1;
+            light.intensity = 1;
             scene.add( light );
 
-            var directional = new THREE.DirectionalLight( 0xffffff );
-            directional.intensity = 0.7;
-            // directional.castShadow = true;
-            scene.add( directional );
+            // var directional = new THREE.DirectionalLight( 0xffffff );
+            // directional.intensity = 0.7;
+            // // directional.castShadow = true;
+            // scene.add( directional );
 
-            // camera.position.y = 2;
-            // camera.rotation.y = 2.5;
+            camera.position.y = 2;
+            camera.rotation.y = 4;
 
             var animate = function () {
                 requestAnimationFrame( animate );
@@ -117,9 +117,51 @@
                 
                 renderer.render( scene, camera );
                 controls.update();
+                camera.rotation.y += 3.14;
+
+                if (frwd){
+                    camera.position.x -= Math.sin(camera.rotation.y)/8;
+                    camera.position.z -= Math.cos(camera.rotation.y)/8;
+                } else if (bkwd){
+                    camera.position.x += Math.sin(camera.rotation.y)/8;
+                    camera.position.z += Math.cos(camera.rotation.y)/8;
+                }
             };
 
             animate();
+
+            //controls
+            window.addEventListener("touchstart", handleStart, false);
+            window.addEventListener("touchend", handleEnd, false);
+
+            var frwd = false;
+            var bkwd = false;
+
+            function handleStart(evt) {
+                evt.preventDefault();
+                // console.log("touchstart.");
+                // console.log(evt.touches);
+                if (evt.touches.length == 1){
+                    frwd = true;
+                    bkwd = false;
+                } else if (evt.touches.length >= 2){
+                    bkwd = true;
+                    frwd = false;
+                }
+            }
+
+            function handleEnd(evt) {
+                evt.preventDefault();
+                // console.log("touchend.");
+                if(evt.touches.length == 0){
+                    frwd = false;
+                    bkwd = false;
+                } else if(evt.touches.length == 1){
+                    frwd = true;
+                    bkwd = false;
+                }
+                // console.log(evt.touches);
+            }
         </script>
 
         <script>
