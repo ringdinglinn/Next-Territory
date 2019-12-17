@@ -13,6 +13,7 @@
         <script src="js/DeviceOrientationControls.js"></script>
         <script src="js/DragControls.js"></script>
         <script src="js/OBJLoader.js"></script>
+        <script src="js/MTLLoader.js"></script>
         
         <script>
             var scene = new THREE.Scene();
@@ -43,20 +44,45 @@
             scene.add( cube2 );
             cube2.position.x = 2;
 
-            var loader = new THREE.OBJLoader();
-
-            // load a resource
-            loader.load(
+            var material3;
+            var loaderMTL = new THREE.MTLLoader();
+            loaderMTL.load(
             	// resource URL
-            	'obj/room.obj',
+            	'obj/board.mtl',
             	// called when resource is loaded
             	function ( object ) {
                 
-                    var material3 = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+                    material3 = object;
+                    console.log(object);
+                
+            	},
+            	// called when loading is in progresses
+            	function ( xhr ) {
+                
+            		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                
+            	},
+            	// called when loading has errors
+            	function ( error ) {
+                
+            		console.log( 'An error happened' );
+                
+            	}
+            );
+
+            var loaderOBJ = new THREE.OBJLoader();
+
+            // load a resource
+            loaderOBJ.load(
+            	// resource URL
+            	'obj/board.obj',
+            	// called when resource is loaded
+            	function ( object ) {
+                
                     object.traverse( function ( child ) {
 
                     if ( child instanceof THREE.Mesh ) {
-                        child.material = material;
+                        child.material = material3;
                     }
 
                     } );
