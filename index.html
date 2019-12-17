@@ -17,12 +17,11 @@
         <script src="js/DeviceOrientationControls.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/GLTFLoader.js"></script>
-
-        <video id="video" width="305" height="540" autoplay loop playsinline muted style="display:none"></video>
         
         <script>
             var scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0xffffff, 0.02);
+            scene.fog = new THREE.FogExp2(0xeeeeee, 0.02);
+            // scene.fog = new THREE.Fog(0xeeeeee, 5, 300);
             scene.background = new THREE.Color(0xffffff);
 
             var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -42,13 +41,6 @@
             
             // var cubes = [];
             
-            // var video = document.getElementById("video");
-            // video.src = "videos/1.mp4";
-            // console.log(video);
-            // video.load();
-            // video.play();
-            // var texture = new THREE.VideoTexture(video);
-            // // var texture = new THREE.TextureLoader().load("textures/poster.png");
 
             // var geometry = new THREE.BoxGeometry( 2, 2, 2 );
             // var material;
@@ -75,20 +67,41 @@
             //     });
 
             const loader = new THREE.GLTFLoader();
-            var model;
+            var model, texture;
+            let videosEnabled = true;
+
+            function setVideoTexture(src) {
+                var v = document.createElement("video");
+
+                v.setAttribute("id", src);
+                v.setAttribute("src", src + ".mp4");
+                v.setAttribute("width", "305");
+                v.setAttribute("height", "540");
+                v.setAttribute("playsinline", true);
+                v.setAttribute("muted", true);
+                v.setAttribute("style", "display:none");
+                document.body.appendChild(v);
+
+                v.src = "videos/" + src + ".mp4";
+                v.loop = true;
+                v.load();
+                v.play();
+                texture = new THREE.VideoTexture(v);
+            }
 
             loader.load("room2_dark.glb", gltf => {
                 model = gltf.scene;
 
-                model.traverse(o => {
-                    // o.material = new THREE.MeshBasicMaterial({map: model.material.map});
-                    // o.material = new THREE.MeshBasicMaterial({map: texture});
-
-                    // if (o instanceof THREE.Mesh) {
-                    //     o.receiveShadow = true;
-                    //     o.castShadow = true;
-                    // }
-                });
+                if (videosEnabled) {
+                    model.traverse(o => {
+                        if (o instanceof THREE.Mesh) {
+                            if (o.material.name.includes("mount")) {
+                                setVideoTexture(o.material.name.charAt(o.material.name.length - 1));
+                                o.material.map = texture;
+                            }
+                        }
+                    });
+                }
 
                 scene.add( model );
             });    
