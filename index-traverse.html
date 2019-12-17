@@ -37,12 +37,12 @@
             
             // var cubes = [];
             
-            // var video = document.getElementById("video");
-            // video.src = "videos/1.mp4";
-            // console.log(video);
-            // video.load();
-            // video.play();
-            // var texture = new THREE.VideoTexture(video);
+            var video = document.getElementById("video");
+            video.src = "videos/1.mp4";
+            console.log(video);
+            video.load();
+            video.play();
+            var texture = new THREE.VideoTexture(video);
             // // var texture = new THREE.TextureLoader().load("textures/poster.png");
 
             // var geometry = new THREE.BoxGeometry( 2, 2, 2 );
@@ -79,7 +79,8 @@
                     if (o instanceof THREE.Mesh){
                         console.log(o.material.name);
                         if (o.material.name == "floor.008"){
-                            //o.material = new THREE.MeshBasicMaterial({map: texture});
+                            o.material = new THREE.MeshBasicMaterial({map: texture});
+                            o.scale.y *= -1;
                         }
                     } 
                     // o.material = new THREE.MeshBasicMaterial({map: texture});
@@ -97,7 +98,8 @@
             directional.castShadow = true;
             scene.add( directional );
 
-            camera.position.z += 4;
+            camera.position.z += 16;
+            camera.position.y += 16;
 
             var animate = function () {
                 requestAnimationFrame( animate );
