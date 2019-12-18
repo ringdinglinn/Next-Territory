@@ -96,6 +96,7 @@
                 document.body.appendChild( renderer.domElement );
                 controls;
 
+                /*
                 if (typeof(DeviceOrientationEvent) !== 'undefined') {
                     DeviceOrientationEvent.requestPermission()
                         .then(response => {
@@ -106,7 +107,7 @@
                     .catch(console.error)
                 } else {
                     controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
-                }
+                }*/
 
             
 
@@ -186,7 +187,7 @@
                     camera.position.z += Math.cos(camera.rotation.y)/12;
                 }
             };
-
+            
             
 
             function start(){
