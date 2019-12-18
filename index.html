@@ -77,8 +77,21 @@
             // renderer.shadowMap.enabled = true;
             
             document.body.appendChild( renderer.domElement );
+            var controls;
 
-            controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
+            if (typeof(DeviceOrientationEvent) !== 'undefined') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                    if (response == 'granted') {
+                    controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
+                }
+            })
+                .catch(console.error)
+            } else {
+                controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
+            }
+
+           
 
             // Load Geometry
             const loader = new THREE.GLTFLoader();
@@ -203,19 +216,7 @@
                 }
             }
 
-            //if (typeof(DeviceOrientationEvent) !== 'undefined') {
-                DeviceOrientationEvent.requestPermission()
-                    .then(response => {
-                      if (response == 'granted') {
-                        window.addEventListener('deviceorientation', (e) => {
-                          // do something with e
-                        })
-                      }
-                    })
-                    .catch(console.error)
-            //} else {
-              // non iOS 13+
-            //}
+
 
         </script>
 
