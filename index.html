@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="cache-control" content="no-cache" content="no-store">
         <title>טסקנ</title>
         <link rel="shortcut icon" href="favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -52,6 +53,7 @@
         <script src="js/DeviceOrientationControls.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/GLTFLoader.js"></script>
+        <script src="js/FilmPass.js"></script>
 
         <div id="ui" class="selectDisable">
             <img src="SVG/Instructions.svg" style="width: auto; height: 30%;" class="fadeOut">
@@ -82,10 +84,10 @@
             const loader = new THREE.GLTFLoader();
             var model, texture;
             let videosEnabled = true;
+            var videoTextures = [];
 
             function setVideoTexture(src) {
                 var v = document.createElement("video");
-
                 v.setAttribute("id", src);
                 v.setAttribute("src", src + ".mp4");
                 v.setAttribute("width", "305");
@@ -94,13 +96,16 @@
                 v.setAttribute("muted", true);
                 v.setAttribute("style", "display:none");
                 document.body.appendChild(v);
-
                 v.src = "videos/" + src + ".mp4";
                 v.loop = true;
                 v.load();
-                v.play();
+                videoTextures.push(v);
+                //v.play();
                 texture = new THREE.VideoTexture(v);
+                console.log(texture);
             }
+
+            
 
             loader.load("room2_dark.glb", gltf => {
                 model = gltf.scene;
@@ -156,8 +161,26 @@
             var frwd = false;
             var bkwd = false;
 
+            var videosPlaying = false;
+            var reloadCount = 0;
+
             function handleStart(evt) {
                 evt.preventDefault();
+                
+                if (videosPlaying == false){
+                    videosPlaying = true;
+                    for (let i = 0; i < videoTextures.length; ++i){
+                        console.log(videoTextures[i]);
+                        console.log(videoTextures[i].error);
+                        console.log(videoTextures[i].error !== null);
+                        if (videoTextures[i].error !== null && reloadCount < 3) {
+                            console.log("reload?");
+                            location.reload();
+                            ++reloadCount;
+                        }
+                        videoTextures[i].play();
+                    }
+                }
                 
                 if (evt.touches.length == 1) {
                     frwd = true;
@@ -179,6 +202,8 @@
                     bkwd = false;
                 }
             }
+
+
         </script>
 
         <script>
