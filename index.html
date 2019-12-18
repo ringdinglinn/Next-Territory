@@ -203,6 +203,19 @@
                 }
             }
 
+            if (typeof(DeviceOrientationEvent) !== 'undefined') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                      if (response == 'granted') {
+                        window.addEventListener('deviceorientation', (e) => {
+                          // do something with e
+                        })
+                      }
+                    })
+                    .catch(console.error)
+            } else {
+              // non iOS 13+
+            }
 
         </script>
 
@@ -223,5 +236,6 @@
                 e.preventDefault();
             }
         </script>
+
     </body>
 </html>
