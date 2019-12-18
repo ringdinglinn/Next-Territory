@@ -109,7 +109,7 @@
                     controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
                 }*/
 
-                controls = new THREE.DeviceOrientationControls( camera, renderer.domElement );
+                controls = new THREE.DeviceOrientationControls( camera );
 
                 // Load Geometry
                 const loader = new THREE.GLTFLoader();
@@ -135,8 +135,6 @@
                     texture = new THREE.VideoTexture(v);
                     console.log(texture);
                 }
-
-
 
                 loader.load("room2_dark.glb", gltf => {
                     model = gltf.scene;
@@ -169,12 +167,8 @@
             }
 
                 
-            var animate = function () {
-                
+            var animate = function () {       
                 requestAnimationFrame( animate );
-                
-                
-                
                 renderer.render( scene, camera );
                 controls.update();
                 camera.rotation.y += 5;
@@ -187,8 +181,6 @@
                     camera.position.z += Math.cos(camera.rotation.y)/12;
                 }
             };
-            
-            
 
             function start(){
                 init();
