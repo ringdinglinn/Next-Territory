@@ -187,7 +187,7 @@
                 }
             };
 
-            window.addEventListener("click", start, false);
+            
 
             function start(){
                 init();
@@ -204,7 +204,11 @@
             videosPlaying = false;
             reloadCount = 0;
 
+            var started = false;
+
             function handleStart(evt) {
+                if (!started) start();
+                started = true;
                 evt.preventDefault();
                 if (videosPlaying == false){
                     videosPlaying = true;
