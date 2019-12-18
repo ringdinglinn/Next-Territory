@@ -74,6 +74,7 @@
 				color: #777777;
 				font-size: 12px;
 			}
+
         </style>
     </head>
 
@@ -201,6 +202,9 @@
 
                 camera.position.y = 2;
                 camera.rotation.y = 4;
+
+                window.addEventListener("touchstart", handleStart, false);
+                window.addEventListener("touchend", handleEnd, false);
             }
 
                 
@@ -225,8 +229,7 @@
             }
 
             // Controls
-            window.addEventListener("touchstart", handleStart, false);
-            window.addEventListener("touchend", handleEnd, false);
+
 
             frwd = false;
             bkwd = false;
