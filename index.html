@@ -203,7 +203,7 @@
                 }
             }
 
-            if (typeof(DeviceOrientationEvent) !== 'undefined') {
+            //if (typeof(DeviceOrientationEvent) !== 'undefined') {
                 DeviceOrientationEvent.requestPermission()
                     .then(response => {
                       if (response == 'granted') {
@@ -213,9 +213,9 @@
                       }
                     })
                     .catch(console.error)
-            } else {
+            //} else {
               // non iOS 13+
-            }
+            //}
 
         </script>
 
