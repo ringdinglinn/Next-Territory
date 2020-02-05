@@ -115,8 +115,10 @@
             var right;
             var h = innerWidth;
             var w = innerHeight;
-            var mouseX;
-            var mouseY;
+            var mouseX = w/2;
+            var mouseY = h/2;
+            var prevMouseX = w/2;
+            var prevMouseY = h/2;
             var deltaX = 0;
             var deltaY = 0;
 
@@ -250,7 +252,12 @@
                 requestAnimationFrame( animate );
                 renderer.render( scene, camera );
                 controls.update();
-                camera.rotation.y += 5;
+
+                deltaX = prevMouseX - mouseX;
+                deltaY = prevMouseY - mouseY;
+
+                prevMouseX = mouseX;
+                prevMouseY = mouseY;
 
                 if (mobileDevice){
                     if (frwd) {
@@ -260,8 +267,8 @@
                     }
                 } else {
 
-                    camera.rotation.x += deltaX/100;
-                    camera.rotation.z += deltaY/100;
+                    camera.rotation.x -= deltaY/100;
+                    console.log(deltaY);
 
                     if (up){
                         moveForward();
@@ -288,19 +295,8 @@
             window.addEventListener('mousemove',function(evt){
                 w = window.innerWidth;
                 h = window.innerHeight;
-                let prevMouseX = mouseX;
-                let prevMouseY = mouseY;
-                console.log(w);
-                console.log(h);
                 mouseX = evt.x - w/2;
                 mouseY = evt.y - h/w;
-                deltaX = prevMouseX - mouseX;
-                deltaY = prevMouseY - mouseY;
-                console.log(mouseX);
-                console.log(mouseY);
-                console.log(deltaX);
-                console.log(deltaY);
-                console.log('-----');
             });
 
             frwd = false;
