@@ -109,10 +109,10 @@
             var reloadCount;
             var frwd;
             var bkwd;
-            var up;
-            var down;
-            var left;
-            var right;
+            var up = false;
+            var down = false;
+            var left = false;
+            var right = false;
             var h = innerWidth;
             var w = innerHeight;
             var mouseX = w/2;
@@ -133,6 +133,31 @@
             console.log(mobileDevice);
 
             function init(){
+
+                var havePointerLock =   'pointerLockElement' in document ||
+                                    'mozPointerLockElement' in document ||
+                                    'webkitPointerLockElement' in document;
+
+                console.log(havePointerLock);
+    
+                document.body.requestPointerLock = document.body.requestPointerLock ||
+                                            document.body.mozRequestPointerLock ||
+                                            document.body.webkitRequestPointerLock;
+    
+                console.log(document.body.requestPointerLock);
+    
+                document.body.requestPointerLock();
+
+                window.addEventListener('mousemove',function(evt){
+                    w = window.innerWidth;
+                    h = window.innerHeight;
+                    deltaX = evt.movementX;
+                    deltaY = evt.movementY;
+                });
+
+
+
+
                 document.getElementById("overlay").remove();
     
                 scene = new THREE.Scene();
@@ -227,7 +252,6 @@
                 window.addEventListener("touchend", handleEnd, false);
             }
 
-
             function moveForward(){
                 camera.position.x -= Math.sin(camera.rotation.y)/12;
                 camera.position.z -= Math.cos(camera.rotation.y)/12;
@@ -239,27 +263,23 @@
             }
 
             function moveLeft(){
-                camera.position.x -= Math.sin(camera.rotation.y)/12;
-                camera.position.z += Math.cos(camera.rotation.y)/12;         
+                camera.position.x -= Math.sin(camera.rotation.y + Math.PI/2)/12;
+                camera.position.z -= Math.cos(camera.rotation.y + Math.PI/2)/12; 
             }
 
-            function moveLeft(){
-                camera.position.x += Math.sin(camera.rotation.y)/12;
-                camera.position.z -= Math.cos(camera.rotation.y)/12;         
+            function moveRight(){
+                camera.position.x += Math.sin(camera.rotation.y + Math.PI/2)/12;
+                camera.position.z += Math.cos(camera.rotation.y + Math.PI/2)/12;
             }
                 
             var animate = function () {       
                 requestAnimationFrame( animate );
                 renderer.render( scene, camera );
-                controls.update();
 
-                deltaX = prevMouseX - mouseX;
-                deltaY = prevMouseY - mouseY;
-
-                prevMouseX = mouseX;
-                prevMouseY = mouseY;
 
                 if (mobileDevice){
+                    controls.update();
+
                     if (frwd) {
                         moveForward();
                     } else if (bkwd) {
@@ -268,15 +288,13 @@
                 } else {
 
                     camera.rotation.x -= deltaY/100;
-                    console.log(deltaY);
+                    camera.rotation.y -= deltaX/100;
 
                     if (up){
                         moveForward();
                     } else if (down) {
                         moveBackward();
-                    } 
-
-                    if (left) {
+                    } else if (left) {
                         moveLeft();
                     } else if (right) {
                         moveRight();
@@ -292,11 +310,31 @@
 
             // Controls
 
-            window.addEventListener('mousemove',function(evt){
-                w = window.innerWidth;
-                h = window.innerHeight;
-                mouseX = evt.x - w/2;
-                mouseY = evt.y - h/w;
+
+            window.addEventListener('keydown', function(evt){
+                console.log("keyCode = " + evt.keyCode);
+                if (evt.keyCode == 87 || evt.keyCode == 38){
+                    up = true;
+                } else if (evt.keyCode == 65 || evt.keyCode == 37){
+                    left = true;
+                } else if (evt.keyCode == 83 || evt.keyCode == 40){
+                    down = true;
+                } else if (evt.keyCode == 68 || evt.keyCode == 39){
+                    right = true;
+                }
+            });
+
+            window.addEventListener('keyup', function(evt){
+                console.log("keyCode = " + evt.keyCode);
+                if (evt.keyCode == 87 || evt.keyCode == 38){
+                    up = false;
+                } else if (evt.keyCode == 65 || evt.keyCode == 37){
+                    left = false;
+                } else if (evt.keyCode == 83 || evt.keyCode == 40){
+                    down = false;
+                } else if (evt.keyCode == 68 || evt.keyCode == 39){
+                    right = false;
+                }
             });
 
             frwd = false;
