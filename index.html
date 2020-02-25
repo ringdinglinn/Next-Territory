@@ -92,7 +92,7 @@
         
 
         <div id="ui" class="selectDisable">
-            <img src="SVG/Instructions.svg" style="width: auto; height: 30%;" class="fadeOut">
+            <img id="img" src="SVG/Instructions.svg" style="width: auto; height: 30%;" class="fadeOut">
         </div>
         
         <script>
@@ -250,6 +250,8 @@
 
                 window.addEventListener("touchstart", handleStart, false);
                 window.addEventListener("touchend", handleEnd, false);
+                var img = document.getElementById("img");
+                img.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, false); 
             }
 
             function moveForward(){
